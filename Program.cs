@@ -1,31 +1,21 @@
-using Scalar.AspNetCore;
-using the_webapi.Middlewares;
-using the_webapi.Repository;
-using the_webapi.Services;
 using the_webapi.Endpoints;
+using the_webapi.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-
-builder.Services.AddSingleton<IPersonService, PersonService>();
-builder.Services.AddSingleton<IPersonRepository, PersonRepository>();
+builder.Services.AddServices(builder.Configuration);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference(options => {
-        options.Title = "Person API";
-        options.Theme = ScalarTheme.Mars;
-    });
+    app.AddDevStuff();
 }
 
 app.UseHttpsRedirection();
 
-app.UseMiddleware<RequestLoggingMiddleware>();
-
+app.AddMyMiddleware();
 //Endpoints
 PersonEndpoints.Map(app);
 
