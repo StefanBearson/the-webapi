@@ -18,5 +18,9 @@ app.UseHttpsRedirection();
 app.AddMyMiddleware();
 //Endpoints
 PersonEndpoints.Map(app);
+var starwarsEndpoint = new StarWarsEndpoint();
+starwarsEndpoint.Map(app);
+
+app.UseExceptionHandler();
 
 app.Run();
